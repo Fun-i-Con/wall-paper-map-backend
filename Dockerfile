@@ -4,18 +4,21 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /src
 
+# poetry をインストール
 RUN pip install poetry
 
-COPY pyproject.toml* poetry.lock* ./
+# pyproject.toml と poetry.lock をコピー
+COPY pyproject.toml poetry.lock ./
 
+# 仮想環境をプロジェクト内に作成し、依存関係をインストール
 RUN poetry config virtualenvs.in-project true
-RUN if [ -f pyproject.toml ]; then poetry install --no-root; fi
+RUN poetry install --no-root
 
-COPY requirements.txt requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
-
+# 残りのアプリケーションソースコードをコピー
 COPY . .
 
+# ポート番号を環境変数から取得
 ENV PORT 8080
 
+# アプリケーションを起動
 CMD ["sh", "-c", "poetry run uvicorn api.main:app --host 0.0.0.0 --port ${PORT}"]
