@@ -1,18 +1,21 @@
-# python3.9のイメージをダウンロード
-FROM python:3.9-buster
-ENV PYTHONUNBUFFERED=1
+FROM python:3.9-slim
 
+# 作業ディレクトリを設定
 WORKDIR /src
 
-# pipを使ってpoetryをインストール
-RUN pip install poetry
+# 必要なファイルをコピー
+COPY pyproject.toml poetry.lock /src/
 
-# poetryの定義ファイルをコピー (存在する場合)
-COPY pyproject.toml* poetry.lock* ./
+# poetryをインストールして依存関係をインストール
+RUN pip install poetry \
+    && poetry config virtualenvs.create false \
+    && poetry install --no-dev
 
-# poetryでライブラリをインストール (pyproject.tomlが既にある場合)
-RUN poetry config virtualenvs.in-project true
-RUN if [ -f pyproject.toml ]; then poetry install --no-root; fi
+# アプリケーションのコードをコピー
+COPY . /src
 
-# uvicornのサーバーを立ち上げる
-ENTRYPOINT ["poetry", "run", "uvicorn", "api.main:app", "--host", "0.0.0.0", "--reload"]
+# ポートを公開
+EXPOSE 8000
+
+# アプリケーションを起動
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
