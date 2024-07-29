@@ -23,7 +23,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Cloud Run用にPORT環境変数を設定
-ENV PORT 8080
+ENV PORT 8000
 
 # uvicornのサーバーを立ち上げる
 CMD ["sh", "-c", "poetry run uvicorn api.main:app --host 0.0.0.0 --port ${PORT}"]
