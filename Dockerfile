@@ -22,7 +22,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # アプリケーションソースコードをコピー
 COPY . .
 
-# Cloud Run用にPORT環境変数を使用
+# Cloud Run用にPORT環境変数を設定
 ENV PORT 8080
 
 # uvicornのサーバーを立ち上げる
