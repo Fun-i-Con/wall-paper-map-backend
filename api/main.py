@@ -1,12 +1,6 @@
 from fastapi import FastAPI
-from api.routers import data
-import os
+
+from api.routers import task
 
 app = FastAPI()
-
-app.include_router(data.router)
-
-if __name__ == "__main__":
-    import uvicorn
-    port = int(os.getenv("PORT", 8080))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+app.include_router(task.router)
