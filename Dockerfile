@@ -1,5 +1,6 @@
 # python3.9のイメージをダウンロード
 FROM python:3.9-buster
+
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /src
@@ -14,8 +15,15 @@ COPY pyproject.toml* poetry.lock* ./
 RUN poetry config virtualenvs.in-project true
 RUN if [ -f pyproject.toml ]; then poetry install --no-root; fi
 
+# requirements.txt を使用する場合
+COPY requirements.txt requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
 # アプリケーションソースコードをコピー
 COPY . .
+
+# Cloud Run用にPORT環境変数を使用
+ENV PORT 8080
 
 # uvicornのサーバーを立ち上げる
 CMD ["sh", "-c", "poetry run uvicorn api.main:app --host 0.0.0.0 --port ${PORT}"]
