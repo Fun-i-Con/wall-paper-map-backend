@@ -1,20 +1,9 @@
+version: '3'
 services:
-  app:
+  demo-app:
     build: .
     volumes:
+      - .dockervenv:/src/.venv
       - .:/src
     ports:
-      - "8000:8000"
-steps:
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/app-image', '.']
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/app-image']
-  - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        gcloud run deploy app-service --image gcr.io/$PROJECT_ID/app-image --region us-central1 --platform managed --allow-unauthenticated
-images:
-  - 'gcr.io/$PROJECT_ID/app-image'
+      - 8000:8000  # ホストマシンのポート8000を、docker内のポート8000に接続する
