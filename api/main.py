@@ -9,7 +9,7 @@ origins = [
     "http://localhost",
     "http://localhost:3000",
     "http://127.0.0.1:5500",  # 必要に応じて追加
-    "http://18.179.199.216/member-page/kabegami-map/index.html", # 実際のドメインを追加
+    "http://18.179.199.216", # 実際のドメインを追加
     "https://wall-paper-map-backend-nsc2gqv76q-uc.a.run.app/" # Cloud Runのドメインを追加
 ]
 
